@@ -1,0 +1,53 @@
+[33mcommit b0cf66c4415ea876c3d507d2ac99739664d386b9[m
+Author: ywt <845112883@qq.com>
+Date:   Wed Jan 10 14:51:16 2018 +0800
+
+    删除不必要的文件,添加本地静态资源读取
+
+[33mcommit d999c2cd8c332aa58cc69747d5c6593cd1ade259[m
+Author: ywt <845112883@qq.com>
+Date:   Tue Jan 9 18:20:38 2018 +0800
+
+    魔方拉开效果
+
+[33mcommit b53d16a2f45d13c666b3c4384e1f0dc05ca6c676[m
+Author: ywt <845112883@qq.com>
+Date:   Mon Jan 8 16:59:01 2018 +0800
+
+    新增自定义立方体
+
+[33mcommit 9ddd16d70d19360832828ffa2f787b554980e5e8[m
+Author: ywt <845112883@qq.com>
+Date:   Thu Jan 4 10:49:21 2018 +0800
+
+    添加地图数据输入
+
+[33mcommit ff91c78dba4ab10bb6a4f018d32b47726324980f[m
+Author: ywt <845112883@qq.com>
+Date:   Thu Jan 4 10:25:12 2018 +0800
+
+    输入框显示字段名
+
+[33mcommit 0122b150f352788f8d39061bb7b633155dde8bbd[m
+Author: ywt <845112883@qq.com>
+Date:   Fri Dec 29 17:52:40 2017 +0800
+
+    增加判断是否需要坐标轴
+
+[33mcommit 99dbd04d72484378fb0451e7755b498ec30fad8b[m
+Author: ywt <845112883@qq.com>
+Date:   Fri Dec 29 17:25:00 2017 +0800
+
+    修复小bug
+
+[33mcommit 6aa7aaf514b664442270da3f3b97c7a8d0da51b1[m
+Author: ywt <845112883@qq.com>
+Date:   Fri Dec 29 14:17:58 2017 +0800
+
+    增加重置样式
+
+[33mcommit 3120b47e5f00833f426dca886d7729e05ac30a7c[m
+Author: ywt <845112883@qq.com>
+Date:   Fri Dec 29 14:02:40 2017 +0800
+
+    终于删除依赖
