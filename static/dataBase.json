@@ -1,9 +1,9 @@
 {
   "series": [{
-      "dataBase": "迪奥销售库",
+      "dataBase": "迪奥销售数据",
       "alias": "",
-      "date": "2016-05-02",
-      "changeData": "2017-06-04",
+      "date": "2016-05-02 16:23:45",
+      "changeData": "2017-06-04 16:23:45",
       "id": "daxs",
       "port": "4588",
       "ip": "170.190.146.321",
@@ -78,9 +78,9 @@
         ]
       }, {
         "tableName": "product",
-        "alias": "产品",
+        "alias": "公司产品",
         "tableData": [{
-            "alias": "公司产品",
+            "alias": "主要产品",
             "title": "xsug-time",
             "dataId": 9,
             "data": [

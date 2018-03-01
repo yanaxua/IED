@@ -1,14 +1,18 @@
 <template>
   <div id="datachoose">
     <el-tabs v-model="activeName">
-      <el-tab-pane label="数据库链接" name="first">
+      <el-tab-pane label="数据库连接" name="first">
         <!--已有数据库连接展示-->
         <!--<el-button class="el-icon-arrow-left dataBack" @click="dataBack">返 回</el-button>-->
-        <el-button class="el-icon-plus dataBaseAdd" @click="dataBaseAdd">新 增</el-button>
-        <el-table :data="dataBase" style="width: 60%">
-          <el-table-column prop="dataBase" label="数据库" width="180">
+        <div>
+          <el-button class="el-icon-plus dataBaseAdd" @click="dataBaseAdd">添 加</el-button>
+        </div>
+        <el-table :data="dataBase" style="width: 70%">
+          <el-table-column prop="dataBase" label="数据源名称" width="180">
           </el-table-column>
-          <el-table-column prop="ip" label="ip" width="180">
+          <el-table-column prop="date" label="创建时间" width="180">
+          </el-table-column>
+          <el-table-column prop="changeData" label="修改时间" width="180">
           </el-table-column>
           <el-table-column label="操作" width="180">
             <template slot-scope="scope">
@@ -19,14 +23,17 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <!--<el-tab-pane label="连接管理" name="second">
-                      </el-tab-pane>-->
+      <el-tab-pane label="数据模型" name="second">
+      </el-tab-pane>
     </el-tabs>
 
     <!--编辑数据库数据-->
     <el-dialog class="dataBar_dialog" title="新增数据库连接" :visible.sync="dataBarShow" :before-close="handleClose">
       <el-form label-width="200px" :model="formLabelAlign" class="dataSetoption">
         <el-form-item label="数据库名称">
+          <el-input v-model="formLabelAlign.dataBase"></el-input>
+        </el-form-item>
+        <el-form-item label="数据库类型">
           <el-input v-model="formLabelAlign.dataBase"></el-input>
         </el-form-item>
         <el-form-item label="IP">
@@ -39,7 +46,7 @@
           <el-input v-model="formLabelAlign.username"></el-input>
         </el-form-item>
         <el-form-item label="用户密码">
-          <el-input v-model="formLabelAlign.pass"></el-input>
+          <el-input type="password" v-model="formLabelAlign.pass"></el-input>
         </el-form-item>
         <el-form-item label="Persist Security Info">
           <!--<el-input v-model="formLabelAlign.date"></el-input>-->
@@ -99,7 +106,7 @@
               <el-button @click="dataEdit(item)" type="text" size="small">编辑</el-button>
             </p>
             <!--<el-input type="textarea" v-text="item" :rows="1">
-                          </el-input>-->
+                              </el-input>-->
           </div>
           <div v-else>
             <p v-text="key"></p>
@@ -351,7 +358,6 @@ export default {
 }
 
 #datachoose .dataSetoption {
-  width: 50%;
   margin-left: 5%;
 }
 

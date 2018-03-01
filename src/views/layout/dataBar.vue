@@ -6,7 +6,6 @@
       <el-menu default-active="1" class="el-menu-vertical-demo" @select="handlerSelect" @open="handleOpen" @close="handleClose">
         <!--:unique-opened="true"-->
         <el-submenu index="1">
-
           <span slot="title">
             <!--<el-button type="primary" size="mini" icon="edit"></el-button>-->
             <i class="el-icon-message"></i>
@@ -25,10 +24,10 @@
       </el-menu>
 
       <!--<el-button-group>
-            <el-button type="primary" class="dataWay database el-icon-menu" @click="dataBase">数据库数据</el-button>
-            <el-button type="primary" class="dataWay datalocal el-icon-upload2" @click="dataLocal">本地上传</el-button>
-            <el-button type="primary" class="dataWay dataindustry el-icon-more" @click="dataIndustry">多维数据</el-button>
-          </el-button-group>-->
+        <el-button type="primary" class="dataWay database el-icon-menu" @click="dataBase">数据库数据</el-button>
+        <el-button type="primary" class="dataWay datalocal el-icon-upload2" @click="dataLocal">本地上传</el-button>
+        <el-button type="primary" class="dataWay dataindustry el-icon-more" @click="dataIndustry">多维数据</el-button>
+      </el-button-group>-->
     </div>
 
     <!--手动添加-->
@@ -69,13 +68,13 @@
       </span>
     </el-dialog>
     <!--选择企业多维数据
-        <el-dialog title="多维数据" :visible.sync="dataIndustryShow" width="80%" :before-close="dialogClose">
-          <span>这是一段信息</span>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="dataIndustryShow = false">取 消</el-button>
-            <el-button type="primary" @click="dataIndustryShow = false">确 定</el-button>
-          </span>
-        </el-dialog>-->
+            <el-dialog title="多维数据" :visible.sync="dataIndustryShow" width="80%" :before-close="dialogClose">
+              <span>这是一段信息</span>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="dataIndustryShow = false">取 消</el-button>
+                <el-button type="primary" @click="dataIndustryShow = false">确 定</el-button>
+              </span>
+            </el-dialog>-->
   </div>
 </template>
   
@@ -244,7 +243,6 @@ export default {
               console.log('文件类型不正确');
               return;
             }
-            console.log(data)
             // 表格的表格范围，可用于判断表头是否数量是否正确
             var fromTo = '';
             // 遍历每张表读取
@@ -322,6 +320,8 @@ export default {
 
 
 
+
+
 /*组件头部*/
 
 .dataBar_div_title {
@@ -336,6 +336,8 @@ export default {
 .upload-demo {
   text-align: center;
 }
+
+
 
 
 

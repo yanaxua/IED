@@ -1,24 +1,40 @@
 <template>
   <div id="mainAppContainer">
-    <draggable id="canvasLis" class="canvasLis clearfix" :options="canvasLisOption" :list="canvasLis" @start="canvasLisStart" @end="canvasLisEnd" element="ul" @mousedown="areaChoose" @change="canvasLisChange">
-      <!--change先于add事件-->
-      <!--@add="canvasLisAdd"-->
-      <!--@change="canvasLisChange"-->
-      <li class="instance clearfix" v-for="(item,index) in canvasLis" :key="item.id" :data-index="index" @click="selectCanvas(index)">
-        <my-echarts class="echarts" :type="item.type" :data="item.data" @creatCanvas="creatCanvas" @delEcharts="delEcharts">
-        </my-echarts>
-      </li>
-    </draggable>
+    <happy-scroll hide-horizontal color="rgba(51,51,51,0.4)">
+      <!--滚动条容器-->
+      <div class="scrollBox">
+        <!--每一页-->
+        <div class="canvasLisBox" v-for="(item1,index1) in canvasLis" :key="item1.page">
+          <div class="canvasLisContainer">
+            <draggable class="canvasLis clearfix" :options="canvasLisOption" :list="item1.canvasLis" element="ul" @change="canvasLisChange">
+              <!--change先于add事件-->
+              <!--@add="canvasLisAdd"-->
+              <!--@change="canvasLisChange"-->
+              <li class="instance clearfix" v-for="(item,index) in item1.canvasLis" :key="item.id" :data-index="index">
+                <my-echarts class="echarts" :type="item.type" :data="item.data" @creatCanvas="creatCanvas" @delEcharts="delEcharts">
+                </my-echarts>
+              </li>
+            </draggable>
+          </div>
+          <div class="pageFooter">第 {{index1+1}} / 1 页</div>
+        </div>
+      </div>
+    </happy-scroll>
   </div>
 </template>
-  
+
 <script>
+import { HappyScroll } from 'vue-happy-scroll'
+/*引入css，推荐将css放入main入口中引入一次即可。*/
+import 'vue-happy-scroll/docs/happy-scroll.css'
 import draggable from 'vuedraggable'
 import wedit from 'wangeditor'
+
 import myEcharts from '@base/myEcharts/myEcharts'
 export default {
   name: "echartsShow",
   components: {
+    HappyScroll,
     draggable,
     wedit,
     myEcharts
@@ -31,11 +47,15 @@ export default {
         },
         draggable: ".dragTitle"
       },
-      canvasLis: [],
+      canvasLis: [{
+        page: 0,/*当前所在页面*/
+        canvasLis: []
+      }],
+      saveState: false,/**是否保存了当前报表的状态*/
     }
   },
   props: {
-    outCanvasLis: {
+    outCanvasLis: {/**用于保存之后的实例传入重新输入与渲染*/
       type: Array,
       default: () => {
         return []
@@ -43,19 +63,18 @@ export default {
     }
   },
   computed: {
-    tempEchartsData: {
-      get() {
-        return JSON.parse(JSON.stringify(this.$store.state.echartsCreat));
-      }
-    }
   },
   methods: {
-    canvasLisStart() {
+    setHeight() {/*用于设置box宽度保持A4大小*/
+      var tempDom = document.querySelectorAll("#mainAppContainer .canvasLis");
+      for (let i = 0; i < this.canvasLis.length; i++) {
+        tempDom[i].style.height = tempDom[i].offsetWidth * (297 / 210) + "px";
+      }
     },
-    canvasLisEnd() {
-    },
-    canvasLisInput(item) {
-      console.log(item);
+    canvasLisChange(e) {
+      if (e.added) {/*当新增元素时,计算是否有足够的位置摆放,否则添加*/
+        console.log(e);
+      }
     },
     creatCanvas(temp) {/**echarts创造事件 */
       let index = temp.instance._dom.parentElement.parentElement.dataset.index;
@@ -67,62 +86,51 @@ export default {
       // temp.instance.showLoading();
     },
     delEcharts(ins) {/*删除实例*/
+      var tempFlag = false;
       for (let i = 0; i < this.canvasLis.length; i++) {
-        var temp = this.canvasLis[i];
-        if (ins.id == temp.instance.id) {
-          this.canvasLis.splice(i, 1);
-          break;
+        for (let j = 0; j < this.canvasLis[i].canvasLis.length; j++) {
+          var temp = this.canvasLis[i].canvasLis[j];
+          if (ins.id == temp.instance.id) {
+            this.canvasLis[i].canvasLis.splice(j, 1);
+            tempFlag = true;
+            break;
+          }
         }
+        if (tempFlag) { break; }
       }
     },
-    selectCanvas(index) {/**实例的点击事件,点击传参多了一个图标类型的name参数*/
-      this.$store.commit("instanceChange", this.canvasLis[index].instance);
-    },
-    areaChoose(e) {/*图形区域选择*/
-      e = e || window.event;
-    },
-    mousemove() {
-
-    },
-    sortCanvas() {
-
-    },
-    dragMove() {
-      /*取消拖拽插件的拖拽*/
-      return false;
-    },
-    canvasLisChange(e) {
-      if (e.added) {
-        // console.log("canvasLisChange");
-      }
-    },
-    resize(e) {
-      let tempDom = document.querySelector("#canvasLis");
-      if (tempDom) {
-        tempDom.style.height = tempDom.offsetWidth * 2 + "px";
-      }
-    }
   },
   created() {
 
   },
   mounted() {
-    /**创建富文本编辑区域*/
-    // var edit = new wedit("#mainAppContainer");
-    // edit.create();
-    this.resize();
-    window.addEventListener("resize", this.resize);
+    this.setHeight();
+    window.addEventListener("resize", this.setHeight);
+  },
+  beforeRouteLeave(to, from, next) {
+    if (this.saveState || this.canvasLis[0].canvasLis.length ==0) {
+      next();
+    } else {
+      this.$confirm('是否不保存报表并离开页面?', '提示', {
+        confirmButtonText: '确定离开(不保存)',
+        cancelButtonText: '取消(继续编辑)',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'warning',
+          message: '报表未保存!'
+        });
+        next();
+      }).catch(() => {
+        // this.$message({
+        //   type: 'info',
+        //   message: '已取消'
+        // });
+        next(false);
+      });
+    }
   },
   watch: {
-    tempEchartsData(val) {
-      /*将检测到的数据添加到canvasLis队列中*/
-      this.canvasLis.push(val);
-    },
-    outCanvasLis(val) {
-      if (val.length != 0) {
-        this.canvasLis = val
-      }
-    }
   }
 }
 </script>
@@ -132,41 +140,68 @@ export default {
 #mainAppContainer {
   position: relative;
   width: 100%;
-  /*width: calc(100% + 20px);*/
   height: 100%;
-  overflow: scroll;
+  background-color: #b3ccec;
 }
 
-#mainAppContainer #canvasLis {
-  width: calc(100% + 20px);
+#mainAppContainer .happy-scroll-content {
+  border-right: 6px solid transparent !important;
+  border-bottom: 6px solid transparent !important;
+}
+
+#mainAppContainer .happy-scroll-container {
+  width: 100% !important;
+}
+
+#mainAppContainer .scrollBox {
   width: 100%;
-  min-height: 100%;
-  box-sizing: padding-box;
-  background-color: #fff;
-  position: relative;
+  padding: 20px;
 }
 
+#mainAppContainer .scrollBox .canvasLisBox {
+  position: relative;
+  padding: 20px 20px 30px 20px;
+  background-color: #fff;
+  margin-bottom: 16px;
+  box-shadow: 3px 3px 16px rgba(0, 0, 0, .3);
+}
 
+#mainAppContainer .scrollBox .canvasLisContainer {
+  width: 100%;
+  height: 100%;
+}
 
-/*每个实例容器*/
+.pageFooter {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -75%);
+  color: #666;
+}
 
-#mainAppContainer #canvasLis li {
+#mainAppContainer .canvasLis {
+  position: relative;
+  width: 100%;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+#mainAppContainer .canvasLis li {
   list-style: none;
   float: left;
   width: 33.3333%;
-  height: 10%;
+  height: 25%;
   box-sizing: border-box;
   padding: 3px;
   background-color: #fff;
-  border: 1px dashed #ccc;
-  /*position: absolute;*/
+  box-shadow: 3px 3px 16px rgba(0, 0, 0, .3);
 }
 
-#mainAppContainer #canvasLis li p {
+#mainAppContainer .canvasLis li p {
   background-image: none;
 }
 
-#mainAppContainer #canvasLis .sortable-ghost {
+#mainAppContainer .canvasLis .sortable-ghost {
   font-size: 30px;
   cursor: move;
 }

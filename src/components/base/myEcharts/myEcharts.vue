@@ -102,10 +102,10 @@ export default {
       this.parentDom.style.zIndex = 999;/*起始让新增的容器标签位于最高*/
       this.parentDom.style.position = "absolute";
       var length = this.parentDom.parentElement.children.length - 1;
-      this.parentDom.style.top = (Math.floor(length / 3) * 10) + "%";
+      this.parentDom.style.top = (Math.floor(length / 3) * 25) + "%";
       this.parentDom.style.left = (length % 3 * 33.33332) + "%";
       this.parentDom.style.width = "33.33333%";
-      this.parentDom.style.height = "10%";
+      this.parentDom.style.height = "25%";
       /**注册主题*/
       if (this.map3D.some((item) => item == this.type)) {
         this.instanceId = this.$echarts.init(document.querySelector("#" + this.id + " .content"), "dark");

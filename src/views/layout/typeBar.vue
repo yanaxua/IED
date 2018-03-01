@@ -4,7 +4,6 @@
     <!--图表类型-->
     <div class="typeBar_div_type">
       <el-tabs v-model="activeName" @tab-click="typeLisTitleClick">
-
         <el-tab-pane v-for="(item1,index1) in typeLis" :key="index1" :label="item1.alia" :name="index1+''">
           <div class="typeChooseBox">
             <draggable class="typeChoose clearfix" element="ul" :options="typeLisOption" v-model="item1.data" :clone="typeLisStart" :move="typeLisMove" @end="typeLisEnd">
@@ -59,14 +58,21 @@
       </div>
       <!--<div class="typeBar_div_title">功能操作</div>-->
       <div class="controllOption">
-        <el-button-group>
-          <!--<el-button @click="addTip" type="primary" class="el-icon-plus">添加备注</el-button>
-          <el-button @click="saveData" type="primary" class="el-icon-upload2">临时保存</el-button>
-          <el-button @click="savePDF" type="primary" class="el-icon-document">输出PDF</el-button>
-          <el-button @click="post" type="primary" class="el-icon-message">一键发布</el-button>-->
-          <el-button @click="savaReport" class="el-icon-d-arrow-right" type="primary" title="保存当前模板"> 保存模板 </el-button>
-          <el-button @click="goReportCenter" class="el-icon-d-arrow-right" type="primary" title="进入报表中心"> 报表中心 </el-button>
-        </el-button-group>
+        <!--<el-button-group>-->
+        <!--<el-button @click="addTip" type="primary" class="el-icon-plus">添加备注</el-button>
+                    <el-button @click="saveData" type="primary" class="el-icon-upload2">临时保存</el-button>
+                    <el-button @click="savePDF" type="primary" class="el-icon-document">输出PDF</el-button>
+                    <el-button @click="post" type="primary" class="el-icon-message">一键发布</el-button>-->
+        <div class="layoutType">
+          <span>图表布局</span>
+          <el-select v-model="layoutType" placeholder="布局方式">
+            <el-option v-for="item in layoutLis" :key="item.name" :label="item.name" :value="item.name">
+            </el-option>
+          </el-select>
+        </div>
+        <el-button @click="savaReport" class="el-icon-d-arrow-right" type="primary" title="保存当前模板"> 保存模板 </el-button>
+        <el-button @click="goReportCenter" class="el-icon-d-arrow-right" type="primary" title="进入报表中心"> 报表中心 </el-button>
+        <!--</el-button-group>-->
       </div>
     </div>
   </div>
@@ -111,7 +117,14 @@ export default {
         },
         sort: false
       },
-      activeName: "0",
+      activeName: "0",/**2D,3D切换变量 */
+      layoutLis: [
+        { name: "竖向单列", value: 1 },
+        { name: "四宫格", value: 4 },
+        { name: "六宫格", value: 6 },
+        { name: "九宫格", value: 9 }
+      ],/*布局选项*/
+      layoutType: "自定义",/**实际布局变量*/
       typeLis: [],/**后台请求获得图表类型数据*/
       optionLis: [],/*实例具体设置项*/
       wordInputShow: false,/*字段拖动目标元素的显隐*/
@@ -222,8 +235,8 @@ export default {
     typeLisEnd(evt) {/*类型选择字段拖动结束*/
       evt.item.style.position = "static";
     },
-    contextmenu(event){/*右键事件转换*/
-      console.log(event.x,event.y);
+    contextmenu(event) {/*右键事件转换*/
+      console.log(event.x, event.y);
       event.cancelBubble = true
       event.returnValue = false;
       return false;
@@ -535,14 +548,6 @@ ul {
 
 
 
-
-
-
-
-
-
-
-
 /*总*/
 
 #views_div_typeBar {
@@ -550,11 +555,6 @@ ul {
   background-color: #DCDFE6;
   display: flex;
 }
-
-
-
-
-
 
 
 
@@ -572,6 +572,11 @@ ul {
   color: #fff;
   text-align: center;
 }
+
+
+
+
+
 
 /*图表类型选择*/
 
@@ -651,31 +656,6 @@ ul {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*图表具体设置*/
 
 #views_div_typeBar .typeOption li {
@@ -740,32 +720,6 @@ ul {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*字段选择*/
 
 #views_div_typeBar .typeBar_div_word {
@@ -805,35 +759,6 @@ ul {
   padding: 5px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*功能操作*/
 
 .controllOption {
@@ -843,10 +768,23 @@ ul {
   bottom: 10px;
   font-size: 13px;
 }
+.controllOption .layoutType{
+  display: flex;
+  margin-bottom: 1px;
+}
+.controllOption .layoutType span{
+  line-height: 36px;
+  font-size: 14px;
+  padding: 0 3px;
+}
+.controllOption .layoutType .el-select{
+  display: inline-block;
 
+}
 .controllOption .el-button {
   margin-bottom: 1px;
   width: 100%;
   text-align: center;
+  margin-left: 0;
 }
 </style>
